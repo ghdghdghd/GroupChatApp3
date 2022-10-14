@@ -12,7 +12,7 @@ class DatabaseService {
   final CollectionReference groupCollection = FirebaseFirestore.instance.collection('groups');
 
   // update userdata
-  Future updateUserData(String fullName, String email, String password, String mCityArea) async {
+  Future updateUserData(String fullName, String email, String password, String mCityArea, double latitude, double longitude) async {
     return await userCollection.doc(uid).set({
       'fullName': fullName,
       'email': email,
@@ -20,13 +20,17 @@ class DatabaseService {
       'groups': [],
       'profilePic': '',
       'location': mCityArea,
+      'userLatitude': latitude,
+      'userLongitude': longitude,
     });
   }
 
   // location 데이터 업데이트
-  Future updateLocation(String mCityArea) async {
+  Future updateLocation(String mCityArea, double latitude, double longitude) async {
     return await userCollection.doc(uid).update({
-      'location': mCityArea,
+      'location' : mCityArea,
+      'userLatitude' : latitude,
+      'userLongitude': longitude,
     });
   }
 

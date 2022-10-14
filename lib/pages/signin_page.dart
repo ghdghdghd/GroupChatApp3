@@ -51,13 +51,16 @@ class _SignInPageState extends State<SignInPage> {
     print(mCityInfo);
     var mCityArea = mCityInfo[0].administrativeArea.toString();
 
+    var lati = gps.latitude;
+    var longi = gps.longitude;
+
     print(_formKey.currentState.validate());
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      await _auth.signInWithEmailAndPassword(email, password, mCityArea).then((result) async {
+      await _auth.signInWithEmailAndPassword(email, password, mCityArea, lati, longi).then((result) async {
         var groupId;
         var userName;
 

@@ -18,7 +18,7 @@ class AuthService {
 
 
   // sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password, String mCityArea) async {
+  Future signInWithEmailAndPassword(String email, String password, String mCityArea, double latitude, double longitude) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       print("여기는 signInWithEmailAndPassword");
@@ -26,7 +26,7 @@ class AuthService {
       print(user);
       print(user.uid);
 
-      await DatabaseService(uid: user.uid).updateLocation(mCityArea); //위치 업데이트
+      await DatabaseService(uid: user.uid).updateLocation(mCityArea, latitude, longitude); //위치 업데이트
 
       return _userFromFirebaseUser(user);
     } catch(e) {
@@ -85,7 +85,7 @@ class AuthService {
 
 
   // register with email and password
-  Future registerWithEmailAndPassword(String fullName, String email, String password, String mCityArea) async {
+  Future registerWithEmailAndPassword(String fullName, String email, String password, String mCityArea, double latitude, double longitude) async {
     print("12341234123412341243");
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -95,7 +95,7 @@ class AuthService {
       print("6666666666666666");
 
       // Create a new document for the user with uid
-      await DatabaseService(uid: user.uid).updateUserData(fullName, email, password, mCityArea);
+      await DatabaseService(uid: user.uid).updateUserData(fullName, email, password, mCityArea, latitude, longitude);
       return _userFromFirebaseUser(user);
     } catch(e) {
       print("걍 에러@!!!!");

@@ -41,15 +41,17 @@ class _RegisterPageState extends State<RegisterPage> {
     List<Placemark> mCityInfo = await placemarkFromCoordinates(gps.latitude, gps.longitude); //좌표값으로 도시정보 가져오기
     print("위치정보");
     print(mCityInfo);
-    var mCityArea = mCityInfo[0].administrativeArea.toString();                              //도시정보주에 administrativeArea값만 가져오기
+    var mCityArea = mCityInfo[0].administrativeArea.toString();                              //도시정보중에 administrativeArea값만 가져오기
 
+    var lati = gps.latitude;
+    var longi = gps.longitude;
 
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      await _auth.registerWithEmailAndPassword(fullName, email, password, mCityArea).then((result) async {
+      await _auth.registerWithEmailAndPassword(fullName, email, password, mCityArea, lati, longi).then((result) async {
         if (result != null) {
           print("계정가입 함수 _onRegister");
           print(result);
