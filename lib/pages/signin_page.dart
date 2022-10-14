@@ -135,24 +135,35 @@ class _SignInPageState extends State<SignInPage> {
       body: Form(
         key: _formKey,
         child: Container(
-          color: Colors.black,
+          color: Colors.transparent,
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 80.0),
             children: <Widget>[
               Column(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/images/TG.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  SizedBox(height: 16.0),
+                  Text('코코뮤'),
+                ],
+              ),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text("Create or Join Groups", style: TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold)),
+                  //Text("Create or Join Groups", style: TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold)),
                 
-                  SizedBox(height: 30.0),
+                  //SizedBox(height: 30.0),
                 
-                  Text("Sign In", style: TextStyle(color: Colors.white, fontSize: 25.0)),
+                  //Text("Sign In", style: TextStyle(color: Colors.white, fontSize: 25.0)),
 
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 200.0),
                 
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     decoration: textInputDecoration.copyWith(labelText: 'Email'),
                     validator: (val) {
                       return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? null : "Please enter a valid email";
@@ -168,7 +179,7 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(height: 15.0),
                 
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     decoration: textInputDecoration.copyWith(labelText: 'Password'),
                     validator: (val) => val.length < 6 ? 'Password not strong enough' : null,
                     obscureText: true,
@@ -188,7 +199,7 @@ class _SignInPageState extends State<SignInPage> {
                       // elevation: 0.0,
                       // color: Colors.blue,
                       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                      child: Text('Sign In', style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                      child: Text('Sign In', style: TextStyle(color: Colors.black, fontSize: 16.0)),
                       onPressed: () {
                         _onSignIn();
                       }
@@ -200,12 +211,12 @@ class _SignInPageState extends State<SignInPage> {
                   Text.rich(
                     TextSpan(
                       text: "Don't have an account? ",
-                      style: TextStyle(color: Colors.white, fontSize: 14.0),
+                      style: TextStyle(color: Colors.black, fontSize: 14.0),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Register here',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline
                           ),
                           recognizer: TapGestureRecognizer()..onTap = () {
