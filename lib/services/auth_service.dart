@@ -12,7 +12,7 @@ class AuthService {
 
 
   // create user object based on FirebaseUser
-  Users _userFromFirebaseUser(User user) {
+  Users? _userFromFirebaseUser(User user) {
     return (user != null) ? Users(uid: user.uid) : null;
   }
 
@@ -22,11 +22,11 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       print("여기는 signInWithEmailAndPassword");
-      User user = result.user;
+      User? user = result.user;
       print(user);
-      print(user.uid);
+      print(user!.uid);
 
-      await DatabaseService(uid: user.uid).updateLocation(mCityArea, latitude, longitude); //위치 업데이트
+      await DatabaseService(uid: user!.uid).updateLocation(mCityArea, latitude, longitude); //위치 업데이트
 
       return _userFromFirebaseUser(user);
     } catch(e) {
@@ -40,9 +40,9 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       print("여기는 selectUser");
       print(result);
-      User user = result.user;
+      User? user = result.user;
       print(user);
-      print(user.uid);
+      print(user!.uid);
 
       var userInfo = await DatabaseService(uid: user.uid).selectUser(); //유저 정보 가져오기
       var fullName = userInfo['fullName'];
@@ -91,11 +91,11 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       print("4444444444445444444");
       print(result);
-      User user = result.user;
+      User? user = result.user;
       print("6666666666666666");
 
       // Create a new document for the user with uid
-      await DatabaseService(uid: user.uid).updateUserData(fullName, email, password, mCityArea, latitude, longitude);
+      await DatabaseService(uid: user!.uid).updateUserData(fullName, email, password, mCityArea, latitude, longitude);
       return _userFromFirebaseUser(user);
     } catch(e) {
       print("걍 에러@!!!!");

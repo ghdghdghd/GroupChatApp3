@@ -4,7 +4,7 @@ class DatabaseService {
 
   final String uid;
   DatabaseService({
-    this.uid
+    required this.uid
   });
 
   // Collection reference

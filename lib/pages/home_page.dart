@@ -20,11 +20,11 @@ class _HomePageState extends State<HomePage> {
 
   // data
   final AuthService _auth = AuthService();
-  User _user;
-  String _groupName;
+  late User _user;
+  late String _groupName;
   String _userName = '';
   String _email = '';
-  Stream _groups;
+  late Stream _groups;
 
 
   // initState
@@ -63,15 +63,16 @@ class _HomePageState extends State<HomePage> {
       stream: _groups,
       builder: (context, snapshot) {
         if(snapshot.hasData) {
-          if(snapshot.data['groups'] != null) {
+         // if((snapshot.data! as Map<String, dynamic>)['groups'] != null) {
+          if((snapshot.data! as Map<String, dynamic>)['groups'] != null) {
             // print(snapshot.data['groups'].length);
-            if(snapshot.data['groups'].length != 0) {
+            if((snapshot.data! as Map<String, dynamic>)['groups'].length != 0) {
               return ListView.builder(
-                itemCount: snapshot.data['groups'].length,
+                itemCount: (snapshot.data! as Map<String, dynamic>)['groups'].length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  int reqIndex = snapshot.data['groups'].length - index - 1;
-                  return GroupTile(userName: snapshot.data['fullName'], groupId: _destructureId(snapshot.data['groups'][reqIndex]), groupName: _destructureName(snapshot.data['groups'][reqIndex]));
+                  int reqIndex = (snapshot.data! as Map<String, dynamic>)['groups'].length - index - 1;
+                  return GroupTile(userName: (snapshot.data! as Map<String, dynamic>)['fullName'], groupId: _destructureId((snapshot.data! as Map<String, dynamic>)['groups'][reqIndex]), groupName: _destructureName((snapshot.data! as Map<String, dynamic>)['groups'][reqIndex]));
                 }
               );
             }
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
 
   // functions
   _getUserAuthAndJoinedGroups() async {
-    _user = await FirebaseAuth.instance.currentUser; //유저정보
+    _user = (await FirebaseAuth.instance.currentUser)!; //유저정보
     print("띠링! _user");
     print(_user);
     await HelperFunctions.getUserNameSharedPreference().then((value) {

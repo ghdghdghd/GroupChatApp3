@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:group_chat_app/helper/helper_functions.dart';
 import 'package:group_chat_app/pages/home_page.dart';
+import 'package:group_chat_app/pages/tabHomePage.dart';
 import 'package:group_chat_app/services/auth_service.dart';
 import 'package:group_chat_app/services/database_service.dart';
 import 'package:group_chat_app/shared/constants.dart';
@@ -18,7 +19,7 @@ import 'chat_page.dart';
 
 class SignInPage extends StatefulWidget {
   final Function toggleView;
-  SignInPage({this.toggleView});
+  SignInPage({required this.toggleView});
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -54,8 +55,8 @@ class _SignInPageState extends State<SignInPage> {
     var lati = gps.latitude;
     var longi = gps.longitude;
 
-    print(_formKey.currentState.validate());
-    if (_formKey.currentState.validate()) {
+    print(_formKey.currentState?.validate());
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -69,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
 
 
         if (result != null) {
-          QuerySnapshot userInfoSnapshot = await DatabaseService().getUserData(email);
+          QuerySnapshot userInfoSnapshot = await DatabaseService(uid: '').getUserData(email);
 
           await HelperFunctions.saveUserLoggedInSharedPreference(true);
           await HelperFunctions.saveUserEmailSharedPreference(email);
@@ -88,27 +89,24 @@ class _SignInPageState extends State<SignInPage> {
             print("Full Name: $value");
           });
 
+
+
+
           //유저이름 가져오기
           await _auth.selectUser(email, password).then((result) async {
             print("유저 정보 가져오기");
             print(result);
             userName = result;
+           });
 
-
-          });
-
-
-          //위치 확인 그리고 방 참가 동작 / 유저네임 그룹네임
-
-           await _auth.selectGroupId(mCityArea).then((result) async {
+          //위치 확인 그리고 방 참가 동작 // 유저네임 그룹네임
+          await _auth.selectGroupId(mCityArea).then((result) async {
              print("방그룹아이디 result 검증");
              print(result);
              if (result != null) {
                groupId = result;
              }
-
-
-           });
+          });
 
 
           // UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -116,7 +114,8 @@ class _SignInPageState extends State<SignInPage> {
           // await DatabaseService(uid: user.uid).selectGroup(mCityArea);
 
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: mCityArea)));
+         //Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: mCityArea)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => tabHomePage(groupId: groupId, userName: userName, groupName: mCityArea)));
           //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
         }
         else {
@@ -146,7 +145,7 @@ class _SignInPageState extends State<SignInPage> {
                     width: 100,
                     height: 100,
                   ),
-                  SizedBox(height: 16.0),
+                  //SizedBox(height: 16.0),
                   Text('코코뮤'),
                 ],
               ),
@@ -164,9 +163,18 @@ class _SignInPageState extends State<SignInPage> {
                 
                   TextFormField(
                     style: TextStyle(color: Colors.black),
-                    decoration: textInputDecoration.copyWith(labelText: 'Email'),
+                    decoration: InputDecoration(
+                                      hintText: 'Email',
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.black)
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.black)
+                                      ),
+                    ),
+
                     validator: (val) {
-                      return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? null : "Please enter a valid email";
+                      return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val!) ? null : "Please enter a valid email";
                     },
                   
                     onChanged: (val) {
@@ -180,8 +188,16 @@ class _SignInPageState extends State<SignInPage> {
                 
                   TextFormField(
                     style: TextStyle(color: Colors.black),
-                    decoration: textInputDecoration.copyWith(labelText: 'Password'),
-                    validator: (val) => val.length < 6 ? 'Password not strong enough' : null,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                    ),
+                    validator: (val) => val!.length < 6 ? 'Password not strong enough' : null,
                     obscureText: true,
                     onChanged: (val) {
                       setState(() {
@@ -199,7 +215,7 @@ class _SignInPageState extends State<SignInPage> {
                       // elevation: 0.0,
                       // color: Colors.blue,
                       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                      child: Text('Sign In', style: TextStyle(color: Colors.black, fontSize: 16.0)),
+                      child: Text('로그인', style: TextStyle(color: Colors.black, fontSize: 16.0)),
                       onPressed: () {
                         _onSignIn();
                       }
@@ -210,11 +226,11 @@ class _SignInPageState extends State<SignInPage> {
                   
                   Text.rich(
                     TextSpan(
-                      text: "Don't have an account? ",
+                      text: "계정이 없으신가요? ",
                       style: TextStyle(color: Colors.black, fontSize: 14.0),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Register here',
+                          text: '간편가입하기',
                           style: TextStyle(
                             color: Colors.black,
                             decoration: TextDecoration.underline
@@ -239,3 +255,104 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 }
+
+
+// class tabHome extends StatefulWidget {
+//   const tabHome({Key? key}) : super(key: key);
+//
+//
+//   @override
+//   State<tabHome> createState() => _tabHomeState();
+// }
+//
+// class _tabHomeState extends State<tabHome> {
+//   final _usernameController = TextEditingController();
+//   final _passwordController = TextEditingController();
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: ListView(
+//           padding: EdgeInsets.symmetric(horizontal: 24.0),
+//           children: <Widget>[
+//             SizedBox(height: 100.0),
+//             Column(
+//               children: <Widget>[
+//                 Image.asset(
+//                   'assets/images/TG.png',
+//
+//
+//                   width: 100,
+//                   height: 100,
+//                 ),
+//                 SizedBox(height: 16.0),
+//                 Text('코코뮤'),
+//               ],
+//             ),
+//             SizedBox(height: 200.0),
+//             // TextField(
+//             //   controller: _usernameController,
+//             //   decoration: InputDecoration(
+//             //     filled: true,
+//             //     labelText: 'Username',
+//             //   ),
+//             // ),
+//             SizedBox(height: 12.0),
+//             // TextField(
+//             //   controller: _passwordController,
+//             //   decoration: InputDecoration(
+//             //     filled: true,
+//             //     labelText: 'Password',
+//             //   ),
+//             //   obscureText: true,
+//             // ),
+//             SizedBox(height: 10.0,),
+//
+//             ElevatedButton(
+//               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+//               child: Text('네이버 로그인'),
+//               onPressed: () {
+//                 _usernameController.clear();
+//                 _passwordController.clear();
+//               },
+//             ),
+//             SizedBox(height: 10.0,),
+//             ElevatedButton(
+//               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.yellow)),
+//               child: Text('카카오 로그인'),
+//               onPressed: () {
+//                 _usernameController.clear();
+//                 _passwordController.clear();
+//               },
+//             ),
+//             ButtonBar(
+//               children: <Widget>[
+//                 //   FlatButton(
+//                 //   child: Text('계정 찾기'),
+//                 //   onPressed: () {
+//                 //     Navigator.push(
+//                 //         context,
+//                 //         MaterialPageRoute(builder: (context) => memberFind())
+//                 //     );
+//                 //   },
+//                 // ),
+//               ],
+//             ),
+//
+//           ],
+//         ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () {
+//           Navigator.pushReplacement(
+//             context,
+//             MaterialPageRoute(builder: (context) => Home()),
+//           );
+//         },
+//
+//       ),
+//     );
+//   }
+// }

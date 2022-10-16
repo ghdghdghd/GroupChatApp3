@@ -11,9 +11,9 @@ class ChatPage extends StatefulWidget {
   final String groupName;
 
   ChatPage({
-    this.groupId,
-    this.userName,
-    this.groupName
+    required this.groupId,
+    required this.userName,
+    required this.groupName
   });
 
   @override
@@ -22,7 +22,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   
-  Stream<QuerySnapshot> _chats;
+  late Stream<QuerySnapshot> _chats;
   TextEditingController messageEditingController = new TextEditingController();
 
   Widget _chatMessages(){
@@ -30,12 +30,13 @@ class _ChatPageState extends State<ChatPage> {
       stream: _chats,
       builder: (context, snapshot){
         return snapshot.hasData ?  ListView.builder(
-          itemCount: snapshot.data.docs.length,
+            //(snapshot.data! as QuerySnapshot)
+          itemCount: (snapshot.data! as QuerySnapshot).docs.length,
           itemBuilder: (context, index){
             return MessageTile(
-              message: snapshot.data.docs[index].data()["message"],
-              sender: snapshot.data.docs[index].data()["sender"],
-              sentByMe: widget.userName == snapshot.data.docs[index].data()["sender"],
+              message: (snapshot.data! as QuerySnapshot).docs[index].get("message"), //검증요
+              sender: (snapshot.data! as QuerySnapshot).docs[index].get("sender"),                           //data()["sender"],
+              sentByMe: widget.userName == (snapshot.data! as QuerySnapshot).docs[index].get("sender")     //data()["sender"],
             );
           }
         )
@@ -53,7 +54,7 @@ class _ChatPageState extends State<ChatPage> {
         'time': DateTime.now().millisecondsSinceEpoch,
       };
 
-      DatabaseService().sendMessage(widget.groupId, chatMessageMap);
+      DatabaseService(uid: '').sendMessage(widget.groupId, chatMessageMap);
 
       setState(() {
         messageEditingController.text = "";
@@ -64,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    DatabaseService().getChats(widget.groupId).then((val) {
+    DatabaseService(uid: '').getChats(widget.groupId).then((val) {
       // print(val);
       setState(() {
         _chats = val;

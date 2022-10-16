@@ -12,7 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function toggleView;
-  RegisterPage({this.toggleView});
+  RegisterPage({required this.toggleView});
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
     var lati = gps.latitude;
     var longi = gps.longitude;
 
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -90,25 +90,45 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Form(
         key: _formKey,
         child: Container(
-          color: Colors.black,
+          color: Colors.transparent,
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 80.0),
             children: <Widget>[
               Column(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/images/TG.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  //SizedBox(height: 16.0),
+                  Text('코코뮤'),
+                ],
+              ),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text("Create or Join Groups", style: TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold)),
+                  // Text("Create or Join Groups", style: TextStyle(color: Colors.black, fontSize: 40.0, fontWeight: FontWeight.bold)),
+                  //
+                  SizedBox(height: 80.0),
                     
-                  SizedBox(height: 30.0),
-                    
-                  Text("Register", style: TextStyle(color: Colors.white, fontSize: 25.0)),
+                  Text("계정 등록", style: TextStyle(color: Colors.black, fontSize: 25.0)),
                     
                   SizedBox(height: 20.0),
                     
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: textInputDecoration.copyWith(labelText: 'Full Name'),
+                    style: TextStyle(color: Colors.black),
+                    //decoration: textInputDecoration.copyWith(labelText: 'Full Name'),
+                    decoration: InputDecoration(
+                      hintText: 'Name',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                    ),
                     onChanged: (val) {
                       setState(() {
                         fullName =  val;
@@ -119,10 +139,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: 15.0),
                     
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: textInputDecoration.copyWith(labelText: 'Email'),
+                    style: TextStyle(color: Colors.black),
+                    //decoration: textInputDecoration.copyWith(labelText: 'Email'),
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                    ),
                     validator: (val) {
-                      return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? null : "Please enter a valid email";
+                      return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val!) ? null : "Please enter a valid email";
                     },
                     onChanged: (val) {
                       setState(() {
@@ -134,9 +163,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: 15.0),
                     
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: textInputDecoration.copyWith(labelText: 'Password'),
-                    validator: (val) => val.length < 6 ? 'Password not strong enough' : null,
+                    style: TextStyle(color: Colors.black),
+                   // decoration: textInputDecoration.copyWith(labelText: 'Password'),
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)
+                      ),
+                    ),
+                    validator: (val) => val!.length < 6 ? 'Password not strong enough' : null,
                     obscureText: true,
                     onChanged: (val) {
                       setState(() {
@@ -154,7 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       // elevation: 0.0,
                       // color: Colors.blue,
                       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                      child: Text('Register', style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                      child: Text('가입', style: TextStyle(color: Colors.black, fontSize: 16.0)),
                       onPressed: () {
                         _onRegister();
                       }
@@ -165,12 +203,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     
                   Text.rich(
                     TextSpan(
-                      text: "Already have an account? ",
-                      style: TextStyle(color: Colors.white, fontSize: 14.0),
+                      text: "이미 계정이 있으신가요? ",
+                      style: TextStyle(color: Colors.black, fontSize: 14.0),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Sign In',
-                          style: TextStyle(color: Colors.white, decoration: TextDecoration.underline),
+                          text: '로그인하기',
+                          style: TextStyle(color: Colors.black, decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()..onTap = () {
                             widget.toggleView();
                           },

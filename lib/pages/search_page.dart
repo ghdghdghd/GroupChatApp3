@@ -15,12 +15,12 @@ class _SearchPageState extends State<SearchPage> {
 
   // data
   TextEditingController searchEditingController = new TextEditingController();
-  QuerySnapshot searchResultSnapshot;
+  late QuerySnapshot searchResultSnapshot;
   bool isLoading = false;
   bool hasUserSearched = false;
   bool _isJoined = false;
   String _userName = '';
-  User _user;
+  late User _user;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
@@ -37,7 +37,7 @@ class _SearchPageState extends State<SearchPage> {
     await HelperFunctions.getUserNameSharedPreference().then((value) {
       _userName = value;
     });
-    _user = await FirebaseAuth.instance.currentUser;
+    _user = (await FirebaseAuth.instance.currentUser)!;
   }
 
 
@@ -46,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         isLoading = true;
       });
-      await DatabaseService().searchByName(searchEditingController.text).then((snapshot) {
+      await DatabaseService(uid: '').searchByName(searchEditingController.text).then((snapshot) { //검증요
         searchResultSnapshot = snapshot;
         //print("$searchResultSnapshot");
         setState(() {

@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
   final String email;
   final AuthService _auth = AuthService();
 
-  ProfilePage({this.userName, this.email});
+  ProfilePage({required this.userName, required this.email});
 
   @override
   Widget build(BuildContext context) {

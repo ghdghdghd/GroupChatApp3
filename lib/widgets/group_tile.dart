@@ -6,7 +6,7 @@ class GroupTile extends StatelessWidget {
   final String groupId;
   final String groupName;
 
-  GroupTile({this.userName, this.groupId, this.groupName});
+  GroupTile({required this.userName, required this.groupId, required this.groupName});
 
   @override
   Widget build(BuildContext context) {
